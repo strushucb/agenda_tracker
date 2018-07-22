@@ -9,11 +9,9 @@ from robobrowser import RoboBrowser
 import json
 import datetime
 import csv
-import urllib.request as request
-import urllib.error as er
 import re
 import requests
-#import PyPDF2
+import string
 import tweepy
 from pdfminer.pdfparser import PDFParser, PDFDocument
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
@@ -137,7 +135,7 @@ def get_legistar_entries(past_entries, city, search_regex):
 				for term in set(term_match):
 					for bogus in ['-',' ']:
 						if bogus in term:
-							term = term.replace(ch,"")
+							term = term.replace(bogus,"")
 					matches = matches + "#"+ term + ", "
 
 				positive_results.append((meetingid,"#"+city["short"]+" #"+city["hash_tag"]+" city meeting on "+meeting_date+" about "+matches,pdf_url))
@@ -198,7 +196,7 @@ def get_non_legistar_entries(past_entries,city,search_regex):
 					for term in set(term_match):
 						for bogus in ['-',' ']:
 							if bogus in term:
-								term = term.replace(ch,"")
+								term = term.replace(bogus,"")
 						matches = matches + "#"+ term + ", "
 					positive_results.append((meetingid,"#"+city["short"]+" #"+city["hash_tag"]+" city meeting on "+meeting_date+" about "+matches,url))
 
@@ -234,12 +232,16 @@ def get_non_legistar_entries(past_entries,city,search_regex):
 				if(len(term_match) > 0):
 					searchdex = str(link['title'])
 					deets = searchdex.split()
-					meeting_date = deets[0]
+					meeting_date = deets[0].lower()
+					for bogus in string.ascii_letters:
+						if bogus in meeting_date:
+							meeting_date = meeting_date.replace(bogus,"")
+
 					matches = ""
 					for term in set(term_match):
 						for bogus in ['-',' ']:
 							if bogus in term:
-								term = term.replace(ch,"")
+								term = term.replace(bogus,"")
 						matches = matches + "#"+ term + ", "
 					positive_results.append((meetingid,"#"+city["short"]+" #"+city["hash_tag"]+" mtg on "+meeting_date+" about "+matches,url))
 	else:
