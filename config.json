@@ -1,0 +1,115 @@
+{
+	"cities" : {
+		"oakland" : {
+			"short": "oakland",
+			"name": "Oakland",
+			"agenda_site": "https://oakland.legistar.com/Calendar.aspx",
+			"root_site": "https://oakland.legistar.com/",
+			"hash_tag": "oakmtg",
+			"is_legistar": true,
+			"uses_meetingagenda": true
+		},
+		"sanleandro" : {
+			"short": "sanleandro",
+			"name": "San Leandro",
+			"agenda_site": "https://sanleandro.legistar.com/Calendar.aspx",
+			"root_site": "https://sanleandro.legistar.com/",
+			"hash_tag": "slmtg",
+			"is_legistar": true,
+			"uses_meetingagenda": true
+		},
+		"sanfrancisco" : {
+			"short": "sanfrancisco",
+			"name": "San Francisco",
+			"agenda_site": "https://sfgov.legistar.com/Calendar.aspx",
+			"root_site": "https://sfgov.legistar.com/",
+			"hash_tag": "sfmtg",
+			"is_legistar": true,
+			"uses_meetingagenda": false
+
+
+		},
+		"hayward" : {
+			"short": "hayward",
+			"name": "Hayward",
+			"agenda_site": "https://hayward.legistar.com/Calendar.aspx",
+			"root_site": "https://hayward.legistar.com/",
+			"hash_tag": "haywardmtg",
+			"is_legistar": true,
+			"uses_meetingagenda": false
+
+		},
+		"berkeley" : {
+			"short": "berkeley",
+			"name": "Berkeley",
+			"agenda_site": "http://www.ci.berkeley.ca.us/Clerk/City_Council/City_Council__Agenda_Index.aspx",
+			"root_site": "http://www.ci.berkeley.ca.us",
+			"hash_tag": "berkmtg",
+			"is_legistar": false,
+			"uses_meetingagenda": false
+		},
+		"berkeley PRC" : {
+			"short": "berkeleyprc",
+			"name": "Berkeley Police Review Commission",
+			"agenda_site": "http://www.cityofberkeley.info/ContentDisplay.aspx?id=12962",
+			"root_site": "http://www.cityofberkeley.info",
+			"hash_tag": "berkmtg",
+			"is_legistar": false,
+			"uses_meetingagenda": false
+		},
+		"berkeley P&J" : {
+			"short": "berkeleyp&j",
+			"name": "Berkeley Peace and Justice Commission",
+			"agenda_site": "http://www.ci.berkeley.ca.us/Clerk/Commissions/Commissions__Peace_and_Justice_Commission_Homepage.aspx",
+			"root_site": "http://www.ci.berkeley.ca.us",
+			"hash_tag": "berkmtg",
+			"is_legistar": false,
+			"uses_meetingagenda": false
+		}
+	},
+	"search_terms" : [
+		"alpr",
+		"aries",
+		"automat[A-Za-z]*.license.plate.reader",
+		"axon",
+		"biometric",
+		"body.camera",
+		"body.worn.camera",
+		"cell.site.simulator",
+		"crims",
+		"data",
+		"database",
+		"detection",
+		"drone",
+		"facial.recognition",
+		"flir",
+		"hailstorm",
+		"imsi",
+		"information.system",
+		"infrared",
+		"iris.scan",
+		"monitoring",
+		"ncric",
+		"predictive",
+		"predpol",
+		"privacy",
+		"red.light.camera",
+		"robot",
+		"shotspotter",
+		"social.media",
+		"stingray",
+		"surveil[A-Za-z]*",
+		"taser",
+		"tech[A-Za-z]*",
+		"uasi",
+		"uav",
+		"unmanned.aerial.vehicles",
+		"urban.shield"],
+	"twitter_creds": {
+		"CONSUMER_KEY" :    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		"CONSUMER_SECRET" : "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		"ACCESS_KEY" :      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		"ACCESS_SECRET" :   "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+	}
+}
+
