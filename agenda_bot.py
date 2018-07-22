@@ -96,8 +96,6 @@ def get_legistar_entries(past_entries, city, search_regex):
 		print("Aborting search for agendas from "+city["name"])
 		return [],[]
 
-
-
 	positive_results = []
 	new_agendas = []
 
@@ -137,7 +135,10 @@ def get_legistar_entries(past_entries, city, search_regex):
 				#turn into string of hash tags		
 				matches = ""
 				for term in set(term_match):
-					matches = matches + "#"+term.replace(" ","") + ", "
+					for bogus in ['-',' ']:
+						if bogus in term:
+							term = term.replace(ch,"")
+					matches = matches + "#"+ term + ", "
 
 				positive_results.append((meetingid,"#"+city["short"]+" #"+city["hash_tag"]+" city meeting on "+meeting_date+" about "+matches,pdf_url))
 
@@ -195,7 +196,10 @@ def get_non_legistar_entries(past_entries,city,search_regex):
 					meeting_date = deets[0]
 					matches = ""
 					for term in set(term_match):
-						matches = matches + "#"+ term.replace(" ","") + ", "
+						for bogus in ['-',' ']:
+							if bogus in term:
+								term = term.replace(ch,"")
+						matches = matches + "#"+ term + ", "
 					positive_results.append((meetingid,"#"+city["short"]+" #"+city["hash_tag"]+" city meeting on "+meeting_date+" about "+matches,url))
 
 	elif(city["short"] == "berkeleyprc" or city["short"] == "berkeleyp&j"):
@@ -233,7 +237,10 @@ def get_non_legistar_entries(past_entries,city,search_regex):
 					meeting_date = deets[0]
 					matches = ""
 					for term in set(term_match):
-						matches = matches + "#"+ term.replace(" ","") + ", "
+						for bogus in ['-',' ']:
+							if bogus in term:
+								term = term.replace(ch,"")
+						matches = matches + "#"+ term + ", "
 					positive_results.append((meetingid,"#"+city["short"]+" #"+city["hash_tag"]+" mtg on "+meeting_date+" about "+matches,url))
 	else:
 		return [],[]
