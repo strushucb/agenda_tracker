@@ -4,7 +4,7 @@
 # Agenda Bot
 #---------------------------------------------------------
 
-from bs4 import BeautifulSoup
+#imports
 from robobrowser import RoboBrowser
 import json
 import datetime
@@ -18,32 +18,24 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LAParams, LTTextBox, LTTextLine
 
-
+#generate_regex: takes a list of regular expression strings, concatenates them with OR and '\b'
 def generate_regex(search_terms):
 	result = r"".join([r"\b"+term+"|" for term in search_terms])
-	return result[:-1]
+	return result[:-1]	#gets rid of the last | 
 
-
+#search_pdf: takes a meetingid, the file content that should be a pdf, and the search reg ex 
+#returns a list of matching terms in the reg ex within the pdf text  
 def search_pdf(meetingid, content,search_regex): 
 	pdf_file = './new_agenda.pdf'
 	try:
+		#write the online file to a local pdf
 		with open(pdf_file, "wb") as output:
 			output.write(content)
 
-		# term_match = []
-		# try:
-		# 	pdfReader = PyPDF2.PdfFileReader(pdf_file)
-		# except:
-		# 	return new_entries, results
-		# for i in range(0,pdfReader.numPages):
-		# 	pageObj = pdfReader.getPage(i)
-		# 	text = pageObj.extractText()
-		# 	m = re.findall(search_regex,text.lower())
-		# 	if m is not None and len(m) > 0:
-		# 		term_match = term_match + list(set(m))
-
 		term_match = []
 		fp = open(pdf_file, 'rb')
+
+		#get the text within each page of a pdf
 		parser = PDFParser(fp)
 		doc = PDFDocument()
 		parser.set_document(doc)
@@ -53,6 +45,7 @@ def search_pdf(meetingid, content,search_regex):
 		laparams = LAParams()
 		device = PDFPageAggregator(rsrcmgr, laparams=laparams)
 		interpreter = PDFPageInterpreter(rsrcmgr, device)
+
 		# Process each page contained in the document.
 		for page in doc.get_pages():
 			text = ""
@@ -60,9 +53,10 @@ def search_pdf(meetingid, content,search_regex):
 			layout = device.get_result()
 			for lt_obj in layout:
 				if isinstance(lt_obj, LTTextBox) or isinstance(lt_obj, LTTextLine):
-					#print(lt_obj.get_text())
 					text = text + " " + lt_obj.get_text()
 			#print(text.encode('utf-8'))
+
+			#do the searching and create a list of matches 
 			m = re.findall(search_regex,text.lower())
 			if m is not None and len(m) > 0:
 				term_match = term_match + list(set(m))
@@ -70,8 +64,9 @@ def search_pdf(meetingid, content,search_regex):
 	except:
 		print("There was a problem with a PDF "+meetingid)	
 
-#using the URL defined by the assignment, it looks for the top 10 results
-#as offset by the integer 'num' multiple of ten.
+#get_legistar_entries: gets a list of past agenda ids, the city object, and the search expression.
+#returns two lists - a list of all new agendas on the city's page and a list of tweets regarding
+#agendas that have terms that match the specified regexs. 
 def get_legistar_entries(past_entries, city, search_regex):
 
 	agenda_url = city["agenda_site"]
@@ -84,7 +79,6 @@ def get_legistar_entries(past_entries, city, search_regex):
 	browser = RoboBrowser(session=s, parser="lxml")
 
 	#Try to open the Legistar site
-	#create a BeautifulSoup parser
 	try:
 		browser.open(agenda_url)
 		browser.submit_form(browser.get_form())
@@ -142,8 +136,9 @@ def get_legistar_entries(past_entries, city, search_regex):
 
 	return new_agendas, positive_results
 
-#using the URL defined by the assignment, it looks for the top 10 results
-#as offset by the integer 'num' multiple of ten.
+#get_non_legistar_entries: gets a list of past agenda ids, the city object, and the search expression.
+#returns two lists - a list of all new agendas on the city's page and a list of tweets regarding
+#agendas that have terms that match the specified regexs. 
 def get_non_legistar_entries(past_entries,city,search_regex):
 	positive_results = []
 	new_agendas = []
@@ -155,7 +150,10 @@ def get_non_legistar_entries(past_entries,city,search_regex):
 	browser = RoboBrowser(session=s, parser="lxml")
 	agenda_url = city["agenda_site"]
 
-	if(city["short"] == "berkeley"):
+	#non-Legistar sites need to be very specific - these sites could throw anything at you.
+	#if you need to add another city, follow this format:
+	#if 
+	if city["short"] == "berkeley":
 		try:
 			browser.open(agenda_url)
 			links = browser.find_all("a", title="Agenda")
@@ -164,7 +162,6 @@ def get_non_legistar_entries(past_entries,city,search_regex):
 			print("Aborting search for agendas from "+city["name"])
 			return [],[]
 
-		#create a BeautifulSoup parser
 		for link in links:
 			url = city["root_site"]+str(link['href'])
 			meetingid = url[url.rfind("/")+1:url.rfind(".aspx")]
@@ -200,7 +197,7 @@ def get_non_legistar_entries(past_entries,city,search_regex):
 						matches = matches + "#"+ term + ", "
 					positive_results.append((meetingid,"#"+city["short"]+" #"+city["hash_tag"]+" city meeting on "+meeting_date+" about "+matches,url))
 
-	elif(city["short"] == "berkeleyprc" or city["short"] == "berkeleyp&j"):
+	elif city["short"] == "berkeleyprc" or city["short"] == "berkeleyp&j":
 		try:
 			browser.open(agenda_url)
 			links = browser.find_all("a",title=re.compile(".genda"))
@@ -209,7 +206,6 @@ def get_non_legistar_entries(past_entries,city,search_regex):
 			print("Aborting search for agendas from "+city["name"])
 			return [],[]
 
-		#create a BeautifulSoup parser
 		for link in links:
 			meetingid = str(link)
 			url = city["root_site"]+str(link['href']).replace(" ","%20")
